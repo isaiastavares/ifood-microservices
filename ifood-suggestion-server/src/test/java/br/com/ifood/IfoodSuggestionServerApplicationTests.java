@@ -1,4 +1,4 @@
-package com.totvs;
+package br.com.ifood;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,10 +7,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TotvsNotificationServerApplicationTests {
+public class IfoodSuggestionServerApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		
 	}
 
 }
