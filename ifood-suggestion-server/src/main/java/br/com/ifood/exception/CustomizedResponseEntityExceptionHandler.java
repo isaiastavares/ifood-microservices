@@ -1,7 +1,9 @@
 package br.com.ifood.exception;
 
 import java.util.Date;
+import java.util.Optional;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpHeaders;
@@ -39,7 +41,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	public final ResponseEntity<ExceptionResponse> handleConstraintViolationException(ConstraintViolationException ex,
 			WebRequest request) {
 
-		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+		Optional<String> message = ex.getConstraintViolations().stream()
+				.map(ConstraintViolation::getMessage)
+				.findFirst();
+
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), 
+				message.isPresent() ? message.get() : ex.getMessage(),
 				request.getDescription(false));
 
 		return ResponseEntity.badRequest().body(exceptionResponse);

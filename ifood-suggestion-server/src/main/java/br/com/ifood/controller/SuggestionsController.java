@@ -1,8 +1,6 @@
 package br.com.ifood.controller;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -19,6 +17,7 @@ import br.com.ifood.domain.TrackList;
 import br.com.ifood.exception.BusinessException;
 import br.com.ifood.exception.CityNotFoundException;
 import br.com.ifood.service.SuggestionsTracksService;
+import br.com.ifood.validation.InRange;
 
 @RestController
 @Validated
@@ -69,8 +68,10 @@ public class SuggestionsController {
 	 */
 	@GetMapping(path = "/location")
 	public ResponseEntity<TrackList> getTracksBasedByCoordinates(
-			@Valid @NotNull(message = "The latitude (lat) could not be null") @Min(-90) @Max(90) @RequestParam Double lat,
-			@Valid @NotNull(message = "The longitude (lon) could not be null") @Min(-180) @Max(180) @RequestParam Double lon)
+			@Valid @NotNull(message = "The latitude (lat) could not be null") 
+			@InRange(min = -90, max = 90, message = "The latitude (lat) must be between -90 and 90") @RequestParam Double lat,
+			@Valid @NotNull(message = "The longitude (lon) could not be null") 
+			@InRange(min = -180, max = 180, message = "The longitude (lon) must be between -180 and 180") @RequestParam Double lon)
 			throws BusinessException {
 
 		TrackList tracks = suggestionsTracksService.suggestTracksByLocation(lat, lon);
