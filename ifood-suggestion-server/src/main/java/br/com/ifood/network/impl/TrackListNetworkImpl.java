@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,6 +37,7 @@ public class TrackListNetworkImpl implements TrackListNetwork {
 	private RestTemplate restTemplate;
 
 	@Override
+	@Cacheable("tracksForGenre")
 	public TrackList suggestTracksForGenre(TrackGenre genre) throws NetworkException {
 		Tracks suggestedTracks = suggestTracksForGenre(genre.description());
 
@@ -48,7 +50,7 @@ public class TrackListNetworkImpl implements TrackListNetwork {
 
 		return new TrackList(genre, descriptions);
 	}
-
+	
     /**
      * Building the authentication key in order to perform new quests
      * <p>
@@ -91,7 +93,7 @@ public class TrackListNetworkImpl implements TrackListNetwork {
 			headers.add(HttpHeaders.AUTHORIZATION, HTTPConstants.BEARER_AUTHORIZATION + getApiKey());
 			HttpEntity<String> entity = new HttpEntity<>(headers);
 			
-			tracks = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, Tracks.class).getBody();
+			tracks = restTemplate.exchange(builder.build().toUriString(), HttpMethod.GET, entity, Tracks.class).getBody();
 		} catch (Exception e) {
 			throw new NetworkException(e);
 		}

@@ -1,6 +1,7 @@
 package br.com.ifood.network.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -25,16 +26,18 @@ public class WeatherNetworkImpl implements WeatherNetwork {
 	private RestTemplate restTemplate;
 
 	@Override
+	@Cacheable("temperatureFromCity")
 	public Float getTemperatureFromCity(String cityName) throws NetworkException, CityNotFoundException {
 		Float temperature = null;
 		try {
-			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(openWeatherProperties.getUrl());
+			UriComponentsBuilder builder = UriComponentsBuilder
+					.fromUriString(openWeatherProperties.getUrl());
 
 			builder.queryParam("q", cityName);
 			builder.queryParam("units", openWeatherProperties.getUnits());
 			builder.queryParam("APPID", openWeatherProperties.getAppId());
 			
-			OpenWeather wheater = restTemplate.getForObject(builder.toUriString(), OpenWeather.class);
+			OpenWeather wheater = restTemplate.getForObject(builder.build().toUriString(), OpenWeather.class);
 
 			temperature = wheater.getMain().getTemp();
 		} catch (HttpClientErrorException ex) {
@@ -46,6 +49,7 @@ public class WeatherNetworkImpl implements WeatherNetwork {
 	}
 
 	@Override
+	@Cacheable("temperatureFromLocation")
 	public Float getTemperatureFromLocation(Double latitude, Double longitude) throws NetworkException {
 		Float temperature = null;
 		try {
@@ -56,7 +60,7 @@ public class WeatherNetworkImpl implements WeatherNetwork {
 			builder.queryParam("units", openWeatherProperties.getUnits());
 			builder.queryParam("APPID", openWeatherProperties.getAppId());
 
-			ResponseEntity<OpenWeather> wheater = restTemplate.getForEntity(builder.toUriString(), OpenWeather.class);
+			ResponseEntity<OpenWeather> wheater = restTemplate.getForEntity(builder.build().toUriString(), OpenWeather.class);
 
 			temperature = wheater.getBody().getMain().getTemp();
 		} catch (Exception e) {
@@ -64,5 +68,5 @@ public class WeatherNetworkImpl implements WeatherNetwork {
 		}
 		return temperature;
 	}
-
+	
 }

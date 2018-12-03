@@ -1,5 +1,7 @@
 package br.com.ifood.service.impl;
 
+import java.util.Locale;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,7 @@ public class SuggestionsTracksServiceImpl implements SuggestionsTracksService {
 	private TrackListNetwork trackListNetwork;
 
 	private static final float HIGH_TEMPERATURE = 30.0f;
-	private static final float MAXIMUM_COOL_TEMPERATURE = 30.0f;
 	private static final float MINIMUM_COOL_TEMPERATURE = 15.0f;
-	private static final float MAXIMUM_CHILL_TEMPERATURE = 14.0f;
 	private static final float MINIMUM_CHILL_TEMPERATURE = 10.0f;
 
 	@Override
@@ -51,7 +51,9 @@ public class SuggestionsTracksServiceImpl implements SuggestionsTracksService {
 		TrackList tracks = null;
 
 		try {
-			Float temperature = weatherNetwork.getTemperatureFromLocation(latitude, longitude);
+			Float temperature = weatherNetwork.getTemperatureFromLocation(
+					getDoubleWith2DecimalPlaces(latitude), 
+					getDoubleWith2DecimalPlaces(longitude));
 
 			TrackGenre genre = getGenreBasedOnTemperature(temperature);
 
@@ -84,9 +86,9 @@ public class SuggestionsTracksServiceImpl implements SuggestionsTracksService {
 		TrackGenre genre = null;
 		if (temperature > HIGH_TEMPERATURE) {
 			genre = TrackGenre.PARTY;
-		} else if (temperature >= MINIMUM_COOL_TEMPERATURE && temperature <= MAXIMUM_COOL_TEMPERATURE) {
+		} else if (temperature >= MINIMUM_COOL_TEMPERATURE) {
 			genre = TrackGenre.POP;
-		} else if (temperature >= MINIMUM_CHILL_TEMPERATURE && temperature <= MAXIMUM_CHILL_TEMPERATURE) {
+		} else if (temperature >= MINIMUM_CHILL_TEMPERATURE) {
 			genre = TrackGenre.ROCK;
 		} else {
 			genre = TrackGenre.CLASSICAL;
@@ -94,6 +96,10 @@ public class SuggestionsTracksServiceImpl implements SuggestionsTracksService {
 		
 		LOG.info("The temperature is {}º Celsius and the genre is {} ", temperature, genre);
 		return genre;
+	}
+	
+	private Double getDoubleWith2DecimalPlaces(Double value) {
+		return Double.valueOf(String.format(Locale.US, "%.2f", value));
 	}
 
 }
