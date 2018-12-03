@@ -1,31 +1,19 @@
 package br.com.ifood.properties;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope(scopeName = "singleton")
 public class SpotifyProperties {
 
-	@Autowired
-	private Environment environment;
-
+	@Value("${spotify.api.url.token}")
 	private String tokenUrl;
+	@Value("${spotify.api.url.recommendations}")
 	private String recommendationsUrl;
+	@Value("${spotify.api.client.id}")
 	private String clientID;
+	@Value("${spotify.api.client.secret}")
 	private String clientSecret;
-
-	@PostConstruct
-	public void init() {
-		tokenUrl = environment.getProperty("spotify.api.url.token");
-		recommendationsUrl = environment.getProperty("spotify.api.url.recommendations");
-		clientID = environment.getProperty("spotify.api.client.id");
-		clientSecret = environment.getProperty("spotify.api.client.secret");
-	}
 
 	public String getTokenUrl() {
 		return tokenUrl;
