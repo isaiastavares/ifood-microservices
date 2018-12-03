@@ -5,14 +5,15 @@ import java.util.stream.Collectors;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.ifood.constants.HTTPConstants;
 import br.com.ifood.domain.TrackDescription;
@@ -23,18 +24,13 @@ import br.com.ifood.domain.spotify.Tracks;
 import br.com.ifood.enums.TrackGenre;
 import br.com.ifood.exception.NetworkException;
 import br.com.ifood.network.TrackListNetwork;
+import br.com.ifood.properties.SpotifyProperties;
 
 @Component
 public class TrackListNetworkImpl implements TrackListNetwork {
 	
-	private static final String AUTHENTICATION_API_URL = "https://accounts.spotify.com/api/token";
-	private static final String RECOMMENDATION_API_URL = "https://api.spotify.com/v1/recommendations?seed_genres=%s";
-	
-	@Value("${spotify.client.id}")
-	private String clientID;
-
-	@Value("${spotify.client.secret}")
-	private String clientSecret;
+	@Autowired
+	private SpotifyProperties spotifyProperties;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -62,22 +58,22 @@ public class TrackListNetworkImpl implements TrackListNetwork {
      * @return a String with the authentication key
      */
     private String getApiKey() {
-        String encodedToken = new String(Base64.encodeBase64((clientID + ":" + clientSecret).getBytes()));
+    	String encodedToken = new String(Base64.encodeBase64((
+    			spotifyProperties.getClientID() + ":" + spotifyProperties.getClientSecret()).getBytes()));
 
+    	HttpHeaders headers = new HttpHeaders();
+    	headers.add(HttpHeaders.AUTHORIZATION, HTTPConstants.BASIC_AUTHORIZATION + encodedToken);
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add(HTTPConstants.GRANT_TYPE, HTTPConstants.CLIENT_CREDENTIALS);
 
-        MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
-        header.add(HttpHeaders.AUTHORIZATION, HTTPConstants.BASIC_AUTHORIZATION + encodedToken);
-        header.add(HttpHeaders.CONTENT_TYPE, HTTPConstants.XFORM_ENCODE_TYPE);
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, headers);
 
-        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, header);
-
-        return restTemplate.exchange(AUTHENTICATION_API_URL, HttpMethod.POST, entity, AuthenticationToken.class).getBody()
+        return restTemplate.exchange(spotifyProperties.getTokenUrl(), HttpMethod.POST, entity, AuthenticationToken.class).getBody()
             .getAccessToken();
     }
-
-
+    
 	/**
 	 * Suggest a list of tracks based on a given genre
 	 *
@@ -88,13 +84,14 @@ public class TrackListNetworkImpl implements TrackListNetwork {
 	public Tracks suggestTracksForGenre(String genre) throws NetworkException {
 		Tracks tracks = null;
 		try {
-			final String uri = String.format(RECOMMENDATION_API_URL, genre);
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(spotifyProperties.getRecommendationsUrl());
+			builder.queryParam("seed_genres", genre);
 
 			MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 			headers.add(HttpHeaders.AUTHORIZATION, HTTPConstants.BEARER_AUTHORIZATION + getApiKey());
 			HttpEntity<String> entity = new HttpEntity<>(headers);
 			
-			tracks = restTemplate.exchange(uri, HttpMethod.GET, entity, Tracks.class).getBody();
+			tracks = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, Tracks.class).getBody();
 		} catch (Exception e) {
 			throw new NetworkException(e);
 		}

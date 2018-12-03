@@ -1,30 +1,30 @@
 package br.com.ifood.domain.openweather;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Coord {
 
     @JsonProperty("lon")
-    private Integer lon;
+    private String lon;
     
     @JsonProperty("lat")
-    private Integer lat;
+    private String lat;
 
-    public Integer getLon() {
+    public String getLon() {
         return lon;
     }
 
-    public void setLon(Integer lon) {
+    public void setLon(String lon) {
         this.lon = lon;
     }
 
-    public Integer getLat() {
+    public String getLat() {
         return lat;
     }
 
-    public void setLat(Integer lat) {
+    public void setLat(String lat) {
         this.lat = lat;
     }
 

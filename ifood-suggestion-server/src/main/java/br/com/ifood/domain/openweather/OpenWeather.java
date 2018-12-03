@@ -2,11 +2,11 @@ package br.com.ifood.domain.openweather;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Wheater {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class OpenWeather {
 
     @JsonProperty("coord")
     private Coord coord;
@@ -21,7 +21,7 @@ public class Wheater {
     private Main main;
     
     @JsonProperty("visibility")
-    private Integer visibility;
+    private String visibility;
     
     @JsonProperty("wind")
     private Wind wind;
@@ -30,19 +30,19 @@ public class Wheater {
     private Clouds clouds;
     
     @JsonProperty("dt")
-    private Integer dt;
+    private String dt;
     
     @JsonProperty("sys")
     private Sys sys;
     
     @JsonProperty("id")
-    private Integer id;
+    private String id;
     
     @JsonProperty("name")
     private String name;
     
     @JsonProperty("cod")
-    private Integer cod;
+    private String cod;
 
 	public Coord getCoord() {
 		return coord;
@@ -76,11 +76,11 @@ public class Wheater {
 		this.main = main;
 	}
 
-	public Integer getVisibility() {
+	public String getVisibility() {
 		return visibility;
 	}
 
-	public void setVisibility(Integer visibility) {
+	public void setVisibility(String visibility) {
 		this.visibility = visibility;
 	}
 
@@ -100,11 +100,11 @@ public class Wheater {
 		this.clouds = clouds;
 	}
 
-	public Integer getDt() {
+	public String getDt() {
 		return dt;
 	}
 
-	public void setDt(Integer dt) {
+	public void setDt(String dt) {
 		this.dt = dt;
 	}
 
@@ -116,11 +116,11 @@ public class Wheater {
 		this.sys = sys;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -132,11 +132,11 @@ public class Wheater {
 		this.name = name;
 	}
 
-	public Integer getCod() {
+	public String getCod() {
 		return cod;
 	}
 
-	public void setCod(Integer cod) {
+	public void setCod(String cod) {
 		this.cod = cod;
 	}
     

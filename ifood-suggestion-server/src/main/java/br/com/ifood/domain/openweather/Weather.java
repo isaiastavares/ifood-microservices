@@ -1,13 +1,13 @@
 package br.com.ifood.domain.openweather;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Weather {
 
     @JsonProperty("id")
-    private Integer id;
+    private String id;
     
     @JsonProperty("main")
     private String main;
@@ -18,11 +18,11 @@ public class Weather {
     @JsonProperty("icon")
     private String icon;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

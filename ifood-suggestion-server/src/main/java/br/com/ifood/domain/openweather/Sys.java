@@ -1,50 +1,50 @@
 package br.com.ifood.domain.openweather;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Sys {
 
 	@JsonProperty("type")
-    private Integer type;
+    private String type;
 	
 	@JsonProperty("id")
-    private Integer id;
+    private String id;
 	
 	@JsonProperty("message")
-    private Float message;
+    private String message;
 	
     @JsonProperty("country")
     private String country;
     
     @JsonProperty("sunrise")
-    private Integer sunrise;
+    private String sunrise;
     
     @JsonProperty("sunset")
-    private Integer sunset;
+    private String sunset;
 
-	public Integer getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(Integer type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public Float getMessage() {
+	public String getMessage() {
 		return message;
 	}
 
-	public void setMessage(Float message) {
+	public void setMessage(String message) {
 		this.message = message;
 	}
 
@@ -56,19 +56,19 @@ public class Sys {
 		this.country = country;
 	}
 
-	public Integer getSunrise() {
+	public String getSunrise() {
 		return sunrise;
 	}
 
-	public void setSunrise(Integer sunrise) {
+	public void setSunrise(String sunrise) {
 		this.sunrise = sunrise;
 	}
 
-	public Integer getSunset() {
+	public String getSunset() {
 		return sunset;
 	}
 
-	public void setSunset(Integer sunset) {
+	public void setSunset(String sunset) {
 		this.sunset = sunset;
 	}
     

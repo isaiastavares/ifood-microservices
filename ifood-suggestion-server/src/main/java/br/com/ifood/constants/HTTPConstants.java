@@ -9,7 +9,5 @@ public final class HTTPConstants {
 	
 	public static final String GRANT_TYPE = "grant_type";
 	public static final String CLIENT_CREDENTIALS = "client_credentials";
-
-	public static final String XFORM_ENCODE_TYPE = "application/x-www-form-urlencoded";
 	
 }

@@ -1,25 +1,25 @@
 package br.com.ifood.domain.openweather;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Main {
 
     @JsonProperty("temp")
     private Float temp;
     
     @JsonProperty("pressure")
-    private Integer pressure;
+    private String pressure;
     
     @JsonProperty("humidity")
-    private Integer humidity;
+    private String humidity;
     
     @JsonProperty("temp_min")
-    private Double tempMin;
+    private String tempMin;
     
     @JsonProperty("temp_max")
-    private Double tempMax;
+    private String tempMax;
 
     public Float getTemp() {
         return temp;
@@ -29,35 +29,35 @@ public class Main {
         this.temp = temp;
     }
     
-    public Integer getPressure() {
+    public String getPressure() {
         return pressure;
     }
 
-    public void setPressure(Integer pressure) {
+    public void setPressure(String pressure) {
         this.pressure = pressure;
     }
 
-    public Integer getHumidity() {
+    public String getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(Integer humidity) {
+    public void setHumidity(String humidity) {
         this.humidity = humidity;
     }
 
-    public Double getTempMin() {
+    public String getTempMin() {
         return tempMin;
     }
 
-    public void setTempMin(Double tempMin) {
+    public void setTempMin(String tempMin) {
         this.tempMin = tempMin;
     }
 
-    public Double getTempMax() {
+    public String getTempMax() {
         return tempMax;
     }
 
-    public void setTempMax(Double tempMax) {
+    public void setTempMax(String tempMax) {
         this.tempMax = tempMax;
     }
 
