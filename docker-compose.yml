@@ -5,22 +5,29 @@ services:
             context: ./ifood-config-server
             dockerfile: Dockerfile
         ports:
-            - 9090:9090
+            - '9090:9090'
     eureka:
         build:
             context: ./ifood-eureka-server
             dockerfile: Dockerfile
         ports:
-            - 9091:9091
+            - '9091:9091'
+        restart: on-failure
         depends_on:
+            - config
+        links:
             - config
     zuul:
         build:
             context: ./ifood-zuul-server
             dockerfile: Dockerfile
         ports:
-            - 9092:9092
+            - '9092:9092'
+        restart: on-failure
         depends_on:
+            - config
+            - eureka
+        links:
             - config
             - eureka
     suggestion:
@@ -28,8 +35,13 @@ services:
             context: ./ifood-suggestion-server
             dockerfile: Dockerfile
         ports:
-            - 9093:9093
+            - '9093:9093'
+        restart: on-failure
         depends_on:
+            - config
+            - eureka
+            - zuul
+        links:
             - config
             - eureka
             - zuul

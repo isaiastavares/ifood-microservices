@@ -36,6 +36,4 @@ echo iFood Zuul Server: BUILD DONE
 echo iFood Suggestion Server: BUILD DONE
 echo ---
 echo Starting Application...
-docker-compose up --build
-
-sleep 60
+docker-compose up -d --build
