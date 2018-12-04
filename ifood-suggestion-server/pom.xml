@@ -6,7 +6,7 @@
 
 	<groupId>br.com.ifood</groupId>
 	<artifactId>ifood-suggestion-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>ifood-suggestion-server</name>
@@ -88,6 +88,7 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>ifood-suggestion-server</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

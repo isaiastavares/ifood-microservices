@@ -5,7 +5,7 @@
 
 	<groupId>br.com.ifood</groupId>
 	<artifactId>ifood-config-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>ifood-config-server</name>
@@ -58,6 +58,7 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>ifood-config-server</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -5,7 +5,7 @@
 
     <groupId>br.com.ifood</groupId>
     <artifactId>ifood-zuul-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>ifood-zuul-server</name>
@@ -61,6 +61,7 @@
     </dependencyManagement>
 
     <build>
+    	<finalName>ifood-zuul-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
