@@ -1,6 +1,8 @@
 package br.com.ifood.controller;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import br.com.ifood.enums.TrackGenre;
 import br.com.ifood.service.SuggestionsTracksService;
 
 @RunWith(SpringRunner.class)
@@ -33,6 +36,7 @@ import br.com.ifood.service.SuggestionsTracksService;
 @AutoConfigureMockMvc
 public class SuggestionsControllerIntTest {
 
+	private static final String CITY_ITAPIRATINS = "Itapiratins";
 	private static final String LONGITUDE_49_25 = "-49.25";
 	private static final String LATITUDE_16_68 = "-16.68";
 	private static final String CITY_GOIANIA = "Goiânia";
@@ -181,6 +185,19 @@ public class SuggestionsControllerIntTest {
 				.andExpect(jsonPath("$").value(hasKey("timestamp")))
 				.andExpect(jsonPath("$.message", is("The longitude (lon) must be between -180 and 180")))
 				.andExpect(jsonPath("$.details", is("uri=/api/suggestions/tracks/location")));
+	}
+	
+	@Test
+	public void test_method_fallback_hystrix_when_city_invalid() throws Exception {
+		mockMvc.perform(get("/api/suggestions/tracks/city")
+				.param("name", CITY_ITAPIRATINS))
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+			.andExpect(jsonPath("$.genre", is(TrackGenre.BRAZIL.name())))
+			.andExpect(jsonPath("$.tracks", hasSize(20)))
+			.andExpect(jsonPath("$.tracks[0]").value(hasKey("artist")))
+			.andExpect(jsonPath("$.tracks[0]").value(hasKey("album")))
+			.andExpect(jsonPath("$.tracks[0]").value(hasKey("trackName")));
 	}
 
 }

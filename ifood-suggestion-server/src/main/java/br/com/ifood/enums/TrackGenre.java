@@ -5,7 +5,8 @@ public enum TrackGenre {
 	PARTY("electronic"), 
 	POP("pop"), 
 	ROCK("rock"), 
-	CLASSICAL("classical");
+	CLASSICAL("classical"),
+	BRAZIL("brazil");
 
 	private String description;
 
