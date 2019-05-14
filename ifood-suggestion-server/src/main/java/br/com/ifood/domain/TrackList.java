@@ -3,6 +3,8 @@ package br.com.ifood.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.ifood.enums.TrackGenre;
 
 public class TrackList {
@@ -65,6 +67,7 @@ public class TrackList {
 		return sb.toString();
 	}
 
+	@JsonIgnore
 	public String getTracksString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("TrackDescription [");

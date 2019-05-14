@@ -37,3 +37,5 @@ echo iFood Suggestion Server: BUILD DONE
 echo ---
 echo Starting Application...
 docker-compose up -d --build
+
+sleep 60

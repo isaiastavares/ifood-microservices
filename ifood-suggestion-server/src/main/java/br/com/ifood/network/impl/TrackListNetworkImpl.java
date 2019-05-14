@@ -32,7 +32,7 @@ public class TrackListNetworkImpl implements TrackListNetwork {
 	
 	@Autowired
 	private SpotifyProperties spotifyProperties;
-
+	
 	@Autowired
 	private RestTemplate restTemplate;
 
